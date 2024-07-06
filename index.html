@@ -14,47 +14,21 @@
       background-image: url('1718605413739.jpg');
       background-size: cover;
     }
-    form {
-      max-width: 300px;
-      margin: 0 auto 20px;
-      padding: 20px;
-      border: 1px solid #ccc;
-      background-color: rgba(249, 249, 249, 0.8);
-    }
-    input[type="text"], input[type="password"] {
-      width: calc(100% - 20px);
-      padding: 10px;
-      margin: 8px 0;
-      display: inline-block;
-      border: 1px solid #ccc;
-      border-radius: 4px;
-      box-sizing: border-box;
-    }
-    input[type="submit"] {
-      background-color: #4CAF50;
-      color: white;
-      padding: 12px 20px;
-      border: none;
-      border-radius: 4px;
-      cursor: pointer;
-      width: 100%;
-    }
-    input[type="submit"]:hover {
-      background-color: #45a049;
-    }
-    #navbar {
+    #navbar, #container {
       display: none;
-      justify-content: space-between;
-      width: 100%;
-      max-width: 600px;
-      margin-bottom: 20px;
     }
     .nav-button {
       cursor: pointer;
       color: blue;
       text-decoration: underline;
+      margin: 0 15px; /* Add margin for spacing */
     }
-    #dashboardSection, #chatSection, #allSection {
+    .nav-bar {
+      display: flex;
+      justify-content: center; /* Center the navbar */
+      margin-bottom: 20px; /* Add some space below the navbar */
+    }
+    #dashboardSection, #chatSection, #allSection, #aboutSection {
       display: none;
       max-width: 600px;
       width: 100%;
@@ -148,251 +122,282 @@
     .search-bar {
       margin-bottom: 20px;
     }
-    #aboutSection {
-      display: none;
-      max-width: 600px;
-      width: 100%;
-      background-color: rgba(249, 249, 249, 0.8);
+    #auth-container {
+      margin: 50px;
+      background-color: rgba(255, 255, 255, 0.8);
       padding: 20px;
-      margin-top: 20px;
+      border-radius: 8px;
+    }
+    .error {
+      color: red;
+    }
+    #aboutSection {
+      color: blue; /* Set text color to blue */
     }
   </style>
 </head>
 <body>
   <h1>Chat Page</h1>
 
-  <div id="loginSection">
-    <h2>Login</h2>
-    <form id="loginForm">
-      <label for="loginUsername">Username:</label>
-      <input type="text" id="loginUsername" name="loginUsername" required>
-      <label for="loginPassword">Password:</label>
-      <input type="password" id="loginPassword" name="loginPassword" required>
-      <input type="submit" value="Login">
+  <div id="auth-container">
+    <h2 id="form-title">Login</h2>
+    <form id="auth-form">
+      <label for="username">Username:</label>
+      <input type="text" id="username" name="username" required minlength="4" maxlength="15">
+      <br>
+      <label for="password">Password:</label>
+      <input type="password" id="password" name="password" required>
+      <br>
+      <button type="submit">Submit</button>
     </form>
-    <p>Don't have an account? <a href="#" id="showSignup">Sign Up</a></p>
+    <button id="toggle-btn">Sign Up</button>
+    <p id="error-message" class="error"></p>
   </div>
 
-  <div id="signupSection">
-    <h2>Sign Up</h2>
-    <form id="signupForm">
-      <label for="signupUsername">Username:</label>
-      <input type="text" id="signupUsername" name="signupUsername" required>
-      <label for="signupPassword">Password:</label>
-      <input type="password" id="signupPassword" name="signupPassword" required>
-      <input type="submit" value="Sign Up">
-    </form>
-    <p>Already have an account? <a href="#" id="showLogin">Login</a></p>
-  </div>
-
-  <div id="navbar">
-    <div class="nav-button" id="navDashboard">Dashboard</div>
-    <div class="nav-button" id="navChat">Chat</div>
-    <div class="nav-button" id="navAll">All Users</div>
-    <div class="nav-button" id="navAbout">About</div>
-  </div>
-
-  <div id="dashboardSection">
-    <h2>Dashboard</h2>
-    <div class="search-bar">
-      <input type="text" id="searchInput" placeholder="Search posts by title">
-      <button id="searchButton">Search</button>
+  <div id="container">
+    <div id="navbar">
+      <span id="dashboardLink" class="nav-button">Dashboard</span>
+      <span id="chatLink" class="nav-button">Chat</span>
+      <span id="allLink" class="nav-button">All</span>
+      <span id="aboutLink" class="nav-button">About</span> <!-- Add About link -->
     </div>
-    <form id="postForm" enctype="multipart/form-data">
-      <input type="text" id="postTitle" name="title" placeholder="Title" required>
-      <input type="file" id="postMedia" name="media" required>
-      <button type="submit">Post</button>
-    </form>
-    <div id="posts"></div>
-  </div>
 
-  <div id="chatSection">
-    <h2>Chat</h2>
-    <div id="messages"></div>
-    <input type="text" id="newMessage" placeholder="Enter your message">
-    <button id="sendMessage">Send</button>
-  </div>
+    <div id="dashboardSection">
+      <h2>Dashboard</h2>
+      <form id="postForm">
+        <label for="postTitle">Title:</label>
+        <input type="text" id="postTitle" name="title" required>
+        <label for="postMedia">Upload Image/Video:</label>
+        <input type="file" id="postMedia" name="media" accept="image/*,video/*" required>
+        <input type="submit" value="Post">
+      </form>
+      <div id="userPosts"></div>
+    </div>
 
-  <div id="allSection">
-    <h2>All Users</h2>
-    <div id="userList"></div>
-  </div>
+    <div id="chatSection">
+      <h2>Chat</h2>
+      <div id="userList"></div>
+      <div id="messages"></div>
+      <input type="text" id="newMessage" placeholder="Type your message here...">
+      <button id="sendMessage">Send</button>
+    </div>
 
-  <div id="aboutSection">
-    <h2>About</h2>
-    <p>Welcome to our chat and media sharing platform. Here you can connect with others, share your moments, and comment on posts.</p>
+    <div id="allSection">
+      <h2>All Posts</h2>
+      <input type="text" id="searchQuery" placeholder="Search by title..." class="search-bar">
+      <button id="searchButton">Search</button>
+      <div id="allPosts"></div>
+    </div>
+
+    <div id="aboutSection">
+      <h2>About</h2>
+      <p>This is application is still in progress you can use, but it is not save the chats for a long time.</p>
+    </div>
   </div>
 
   <script src="/socket.io/socket.io.js"></script>
   <script>
     const socket = io();
+    let currentUsername = '';
 
-    document.getElementById('showSignup').addEventListener('click', function() {
-      document.getElementById('loginSection').style.display = 'none';
-      document.getElementById('signupSection').style.display = 'block';
-    });
+    // Authentication form logic
+    const formTitle = document.getElementById('form-title');
+    const toggleBtn = document.getElementById('toggle-btn');
+    const authForm = document.getElementById('auth-form');
+    const errorMessage = document.getElementById('error-message');
 
-    document.getElementById('showLogin').addEventListener('click', function() {
-      document.getElementById('signupSection').style.display = 'none';
-      document.getElementById('loginSection').style.display = 'block';
-    });
+    let storedUsername = '';
+    let storedPassword = '';
 
-    document.getElementById('loginForm').addEventListener('submit', function(event) {
-      event.preventDefault();
-      const username = document.getElementById('loginUsername').value;
-      const password = document.getElementById('loginPassword').value;
-      if (username && password) {
-        localStorage.setItem('username', username);
-        document.getElementById('loginSection').style.display = 'none';
-        document.getElementById('navbar').style.display = 'flex';
-        document.getElementById('chatSection').style.display = 'block';
-        loadPosts();
+    toggleBtn.addEventListener('click', function() {
+      errorMessage.textContent = '';
+      if (formTitle.textContent === 'Login') {
+        formTitle.textContent = 'Sign Up';
+        toggleBtn.textContent = 'Login';
+      } else {
+        formTitle.textContent = 'Login';
+        toggleBtn.textContent = 'Sign Up';
       }
     });
 
-    document.getElementById('signupForm').addEventListener('submit', function(event) {
-      event.preventDefault();
-      const username = document.getElementById('signupUsername').value;
-      const password = document.getElementById('signupPassword').value;
-      if (username && password) {
-        localStorage.setItem('username', username);
-        document.getElementById('signupSection').style.display = 'none';
-        document.getElementById('navbar').style.display = 'flex';
-        document.getElementById('chatSection').style.display = 'block';
-        loadPosts();
-      }
-    });
+    authForm.addEventListener('submit', function(e) {
+      e.preventDefault();
+      const username = document.getElementById('username').value;
+      const password = document.getElementById('password').value;
 
-    document.getElementById('sendMessage').addEventListener('click', function() {
-      const message = document.getElementById('newMessage').value;
-      const username = localStorage.getItem('username');
-      if (message && username) {
-        socket.emit('chat', { username, message });
-        document.getElementById('newMessage').value = '';
-      }
-    });
-
-    socket.on('chat', function(message) {
-      const messages = document.getElementById('messages');
-      const p = document.createElement('p');
-      p.textContent = `${message.username}: ${message.message}`;
-      messages.appendChild(p);
-      messages.scrollTop = messages.scrollHeight;
-    });
-
-    document.getElementById('postForm').addEventListener('submit', function(event) {
-      event.preventDefault();
-      const formData = new FormData(event.target);
-      formData.append('username', localStorage.getItem('username'));
-      fetch('/upload', {
-        method: 'POST',
-        body: formData
-      }).then(response => response.json()).then(post => {
-        if (post.error) {
-          console.error(post.error);
+      if (formTitle.textContent === 'Sign Up') {
+        storedUsername = username;
+        storedPassword = password;
+        alert('Sign up successful! You can now log in.');
+        formTitle.textContent = 'Login';
+        toggleBtn.textContent = 'Sign Up';
+        authForm.reset();
+      } else {
+        if (username === storedUsername && password === storedPassword) {
+          currentUsername = username;
+          errorMessage.textContent = '';
+          document.getElementById('auth-container').style.display = 'none';
+          document.getElementById('container').style.display = 'block';
+          document.getElementById('navbar').style.display = 'flex';
+          document.getElementById('dashboardSection').style.display = 'block';
         } else {
-          appendPost(post);
+          errorMessage.textContent = 'Incorrect username or password.';
         }
-      });
+      }
     });
 
-    function appendPost(post) {
-      const postsDiv = document.getElementById('posts');
-      const postDiv = document.createElement('div');
-      postDiv.classList.add('post');
-      postDiv.innerHTML = `
-        <p class="username">${post.username}</p>
-        <p>${post.title}</p>
-        ${post.type === 'image' ? `<img src="${post.url}" alt="${post.title}">` : ''}
-        ${post.type === 'video' ? `<video controls src="${post.url}"></video>` : ''}
-        <div class="reaction-buttons">
-          <button onclick="likePost(${post.id})">commet</button>
-        </div>
-        <div class="comments">
-          ${post.comments.map(comment => `<div class="comment"><strong>${comment.username}:</strong> ${comment.comment}</div>`).join('')}
-        </div>
-        <div class="comment-form">
-          <input type="text" class="comment-input" placeholder="Add a comment">
-          <button class="comment-button" onclick="addComment(${post.id}, this.previousElementSibling)">Post</button>
-        </div>
-      `;
-      postsDiv.prepend(postDiv);
-    }
-
-    function loadPosts() {
-      fetch('/posts').then(response => response.json()).then(posts => {
-        const postsDiv = document.getElementById('posts');
-        postsDiv.innerHTML = '';
-        posts.forEach(post => {
-          appendPost(post);
-        });
-      });
-    }
-
-    function likePost(postId) {
-      const username = localStorage.getItem('username');
-      if (username) {
-        socket.emit('like', { postId, username });
-      }
-    }
-
-    function addComment(postId, inputElement) {
-      const comment = inputElement.value;
-      const username = localStorage.getItem('username');
-      if (comment && username) {
-        fetch('/comment', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ postId, username, comment })
-        }).then(response => response.json()).then(post => {
-          inputElement.value = '';
-          const postDiv = Array.from(document.getElementsByClassName('post')).find(div => div.querySelector('button[onclick^="likePost"]').getAttribute('onclick').includes(post.id));
-          const commentsDiv = postDiv.querySelector('.comments');
-          commentsDiv.innerHTML = post.comments.map(comment => `<div class="comment"><strong>${comment.username}:</strong> ${comment.comment}</div>`).join('');
-        });
-      }
-    }
-
-    document.getElementById('searchButton').addEventListener('click', function() {
-      const title = document.getElementById('searchInput').value;
-      fetch(`/search?title=${title}`).then(response => response.json()).then(posts => {
-        const postsDiv = document.getElementById('posts');
-        postsDiv.innerHTML = '';
-        posts.forEach(post => {
-          appendPost(post);
-        });
-      });
-    });
-
-    document.getElementById('navDashboard').addEventListener('click', function() {
+    // Navigation logic
+    document.getElementById('dashboardLink').addEventListener('click', function() {
       document.getElementById('dashboardSection').style.display = 'block';
       document.getElementById('chatSection').style.display = 'none';
       document.getElementById('allSection').style.display = 'none';
       document.getElementById('aboutSection').style.display = 'none';
     });
 
-    document.getElementById('navChat').addEventListener('click', function() {
+    document.getElementById('chatLink').addEventListener('click', function() {
       document.getElementById('dashboardSection').style.display = 'none';
       document.getElementById('chatSection').style.display = 'block';
       document.getElementById('allSection').style.display = 'none';
       document.getElementById('aboutSection').style.display = 'none';
     });
 
-    document.getElementById('navAll').addEventListener('click', function() {
+    document.getElementById('allLink').addEventListener('click', function() {
       document.getElementById('dashboardSection').style.display = 'none';
       document.getElementById('chatSection').style.display = 'none';
       document.getElementById('allSection').style.display = 'block';
       document.getElementById('aboutSection').style.display = 'none';
+      loadAllPosts();
     });
 
-    document.getElementById('navAbout').addEventListener('click', function() {
+    document.getElementById('aboutLink').addEventListener('click', function() {
       document.getElementById('dashboardSection').style.display = 'none';
       document.getElementById('chatSection').style.display = 'none';
       document.getElementById('allSection').style.display = 'none';
       document.getElementById('aboutSection').style.display = 'block';
     });
 
-    loadPosts();
+    // Post form logic
+    document.getElementById('postForm').addEventListener('submit', function(event) {
+      event.preventDefault();
+
+      const formData = new FormData(event.target);
+      formData.append('username', currentUsername);
+
+      fetch('/upload', {
+        method: 'POST',
+        body: formData
+      })
+      .then(response => response.json())
+      .then(post => {
+        displayPost(post, document.getElementById('userPosts'));
+      });
+    });
+
+    // Chat logic
+    document.getElementById('sendMessage').addEventListener('click', function() {
+      const message = {
+        username: currentUsername,
+        text: document.getElementById('newMessage').value,
+        timestamp: new Date()
+      };
+      socket.emit('chat', message);
+      document.getElementById('newMessage').value = '';
+    });
+
+    socket.on('chat', function(message) {
+      const messages = document.getElementById('messages');
+      const p = document.createElement('p');
+      p.textContent = `${message.username}: ${message.text} (${new Date(message.timestamp).toLocaleTimeString()})`;
+      messages.appendChild(p);
+      messages.scrollTop = messages.scrollHeight;
+    });
+
+    // Search logic
+    document.getElementById('searchButton').addEventListener('click', function() {
+      const query = document.getElementById('searchQuery').value;
+      fetch(`/search?title=${encodeURIComponent(query)}`)
+        .then(response => response.json())
+        .then(posts => {
+          const allPostsDiv = document.getElementById('allPosts');
+          allPostsDiv.innerHTML = '';
+          posts.forEach(post => displayPost(post, allPostsDiv));
+        });
+    });
+
+    // Display post
+    function displayPost(post, container) {
+      const postDiv = document.createElement('div');
+      postDiv.className = 'post';
+
+      const title = document.createElement('h3');
+      title.textContent = post.title;
+      postDiv.appendChild(title);
+
+      const username = document.createElement('p');
+      username.className = 'username';
+      username.textContent = `Posted by: ${post.username}`;
+      postDiv.appendChild(username);
+
+      const media = document.createElement(post.type === 'image' ? 'img' : 'video');
+      media.src = post.url;
+      if (post.type === 'video') media.controls = true;
+      postDiv.appendChild(media);
+
+      const commentsDiv = document.createElement('div');
+      commentsDiv.className = 'comments';
+      post.comments.forEach(comment => {
+        const commentP = document.createElement('p');
+        commentP.className = 'comment';
+        commentP.textContent = `${comment.username}: ${comment.comment}`;
+        commentsDiv.appendChild(commentP);
+      });
+      postDiv.appendChild(commentsDiv);
+
+      const commentForm = document.createElement('div');
+      commentForm.className = 'comment-form';
+      const commentInput = document.createElement('input');
+      commentInput.className = 'comment-input';
+      commentInput.placeholder = 'Add a comment...';
+      const commentButton = document.createElement('button');
+      commentButton.className = 'comment-button';
+      commentButton.textContent = 'Comment';
+
+      commentButton.addEventListener('click', function() {
+        const comment = commentInput.value;
+        fetch('/comment', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ postId: post.id, username: currentUsername, comment })
+        })
+        .then(response => response.json())
+        .then(updatedPost => {
+          commentsDiv.innerHTML = '';
+          updatedPost.comments.forEach(comment => {
+            const commentP = document.createElement('p');
+            commentP.className = 'comment';
+            commentP.textContent = `${comment.username}: ${comment.comment}`;
+            commentsDiv.appendChild(commentP);
+          });
+        });
+        commentInput.value = '';
+      });
+
+      commentForm.appendChild(commentInput);
+      commentForm.appendChild(commentButton);
+      postDiv.appendChild(commentForm);
+
+      container.appendChild(postDiv);
+    }
+
+    function loadAllPosts() {
+      fetch('/posts')
+        .then(response => response.json())
+        .then(posts => {
+          const allPostsDiv = document.getElementById('allPosts');
+          allPostsDiv.innerHTML = '';
+          posts.forEach(post => displayPost(post, allPostsDiv));
+        });
+    }
   </script>
 </body>
-</html>
+  </html>
